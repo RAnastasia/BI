@@ -1,0 +1,50 @@
+
+SELECT [Field1]
+      ,[Field2]
+      ,[Field3]
+      ,[Field4]
+      ,[Field5]
+      ,[Field6]
+      ,[Field7]
+  FROM [dbo].[Task1]
+	WHERE
+    (CASE WHEN Field1 >= 0  THEN 1 ELSE 0 END) ^
+    (CASE WHEN Field2 >= Field3 THEN 1 ELSE 0 END) ^
+    (CASE WHEN Field3 < Field5  THEN 1 ELSE 0 END) ^
+	(CASE WHEN Field4 = Field6  THEN 1 ELSE 0 END) ^
+    (CASE WHEN Field7 > 80 THEN 1 ELSE 0 END) ^
+    (CASE WHEN Field6 < Field7 THEN 1 ELSE 0 END) ^
+    (CASE WHEN Field7 > Field2  THEN 1 ELSE 0 END) = 0
+
+
+
+Задание 2
+SQL query for Impala.
+
+
+
+CREATE VIEW IF NOT EXISTS Product_Info_view AS
+
+SELECT id_item
+      ,item_name
+      ,item_price
+      ,timestamp
+      ,deleted
+FROM (SELECT
+      		 id_item
+      		,item_name
+      		,item_price
+      		,timestamp
+      		,deleted 
+      		,MAX(timestamp) OVER (PARTITION BY id_item) AS rmax_sal
+      FROM product ) as rr
+WHERE timestamp = rr.rmax_sal and deleted = '0'
+
+
+Rezult
+id_item 	item_name	item_price	timestamp	deleted
+2		strong shield	30		1454292060		0
+3		helmet		10		1454385660		0
+
+
+
